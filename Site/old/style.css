@@ -1,0 +1,54 @@
+/*nerd*/
+@import url("https://fonts.googleapis.com/css2?family=Train+One&display=swap");
+h1,
+h2 {
+  font-family: "Train One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+a {
+  color: #c93c3c;
+}
+
+body {
+  background-color: #eaa2a2;
+}
+hr {
+  border: 0;
+  height: 2px;
+  background: #bf5656;
+  margin: 20px 0;
+}
+.marquee-viewport {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 30px;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #bf5656;
+}
+.marquee-track {
+  display: flex;
+  flex-direction: column;
+  animation: marquee-vertical 40s linear infinite;
+}
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+.text-block {
+  text-orientation: mixed;
+  transform: translateX(4px);
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+  font-weight: 200;
+  font-style: normal;
+  font-size: 22px;
+  color: #eaa2a2;
+}
