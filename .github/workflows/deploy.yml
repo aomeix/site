@@ -1,9 +1,7 @@
 name: Deploy 2 NekoWeb
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
