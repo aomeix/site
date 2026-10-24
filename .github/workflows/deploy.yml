@@ -1,4 +1,4 @@
-name: Deploy 2 NekoWeb
+name: Deploy 2 Nekoweb
 
 on:
   push:
@@ -11,10 +11,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Deploy 2 NekoWeb
+      - name: Cleanse of shit
+        run: |
+          mkdir -p ./build
+          cp -r ./* ./build/
+          rm -rf ./build/.github
+          rm -rf ./build/README.md
+
+      - name: Deploy 2 Nekoweb
         uses: mp-pinheiro/nekoweb-deploy@0.3.0
         with:
           API_KEY: ${{ secrets.NEKOWEB_API_KEY }}
-          BUILD_DIR: .
+          BUILD_DIR: ./build
           DEPLOY_DIR: /aomeix.nekoweb.org
           NEKOWEB_PAGENAME: aomeix
