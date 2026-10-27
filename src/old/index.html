@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
+    <title>aomeix</title>
+  </head>
+  <body>
+    <h2 style="background-color: #bf5656; color: #eba2a2;">aomeix</h2>
+    <hr />
+    <p>it seems like you're on the old version of my site! you probably went here on purpose, <a href="https://aomeix.eu.org">but here's a link back up to the surface, just in case!</a></p>
+    <p>hello</p>
+    <p>theres not much here yet!</p>
+    <p>if anything looks funky, try shift+f5 to reload without cache</p>
+    <p>You should join my <a href="https://d.aomeix.eu.org">Discord server</a>, or sign my <a href="https://aomeix.atabook.org">guestbook!</a></p>
+    <br />
+
+    <img src="https://files.catbox.moe/l26ybi.gif" /><br><img src="blinkies/lesbian.gif"><br><img width=160 src="blinkies/aomeix_steampunk.png"><br><a href="https://lunana-bread.github.io/" title="lunana-bread"><img src="https://lunana-bread.github.io/images/lunana-bread.png"></a>
+    <hr />
+    <small
+      ><a href="VSAUCE.html">vsauce shrine</a> *
+      <a href="yay.html">stuff i like</a> * <a href="contact.html">contact</a> * 
+      <a href="other.html">other</a></small>
+    <p>
+      <small><small>last modified 2026/07/26</small></small>
+    </p>
+
+    <!-- dumb thing -->
+    <div class="marquee-viewport">
+      <div class="marquee-track">
+        <div class="text-block">
+          <span class="external-text">...</span>
+        </div>
+
+        <div class="text-block">
+          <span class="external-text">loading...</span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        fetch('ticker.txt?ö=' + Date.now())
+      .then(response => response.text())
+      .then(data => {
+        setTimeout(() => {
+          const targets = document.querySelectorAll('.external-text');
+          targets.forEach(el => {
+            el.innerHTML = data;
+          });
+        }, 100);
+      })
+    </script>
+    <!-- end of dumb thing -->
+  </body>
+</html>

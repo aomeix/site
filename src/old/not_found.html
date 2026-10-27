@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<head>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<pre><center>   ░████     ░████      ░████   
+  ░██ ██    ░██ ░██    ░██ ██   
+ ░██  ██   ░██ ░████  ░██  ██   
+░██   ██   ░██░██░██ ░██   ██   
+░█████████ ░████ ░██ ░█████████ 
+     ░██    ░██ ░██       ░██   
+   ░██     ░████        ░██ </center></pre>
+<hr />
+<br />
+<center>Once upon a midnight dreary, While I web surfed, weak and weary, For pages long forgotten yore.
+When I clicked my fav'rite href, Suddenly there came a warning, and my heart was filled with mourning,
+Mourning for my dear <span id="page"></span>, "Tis not possible!", I muttered, "Give thine pages, I emplore!"
+Quoth the server, 404.</center>
+<script>
+  document.getElementById("page").textContent =
+    '' + window.location.pathname + '';
+</script>

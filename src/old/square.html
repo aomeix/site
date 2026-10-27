@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<head>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Format Text Into A Square</h2>
+    <hr>
+    <i>this tool adds newline characters into your text to format it into (roughly) a square. you can also resize the text box to change where it inserts newlines! this is intended to be used on text inputs with no line wrap, such as OWOT</i>
+    <br><label for="input">Input</label><br>
+    <textarea id="input" rows="10" cols="60" placeholder="..."></textarea>
+    
+    <br><br>
+    <button onclick="formatToSquare()">Format</button>
+    <button onclick="copyText()">Copy</button>
+    
+    <br><br>
+    <label for="output">Output</label><br>
+    <textarea id="output" rows="15" cols="60" readonly wrap="off" style="font-family: monospace;"></textarea>
+
+    <script>
+        let lastWidthCols = 0;
+        let charWidthPx = 0;
+
+        function getCharWidth(textarea) {
+            if (charWidthPx > 0) return charWidthPx;
+            
+            const span = document.createElement('span');
+            span.style.font = window.getComputedStyle(textarea).font;
+            span.style.visibility = 'hidden';
+            span.style.position = 'absolute';
+            span.style.whiteSpace = 'pre';
+            span.textContent = 'X'.repeat(100);
+            document.body.appendChild(span);
+            charWidthPx = span.offsetWidth / 100;
+            document.body.removeChild(span);
+            
+            return charWidthPx;
+        }
+        function doWrapText(targetWidth) {
+            const input = document.getElementById('input').value;
+            const outputField = document.getElementById('output');
+            const words = input.replace(/\s+/g, ' ').trim().split(' ');
+            
+            if (words.length === 0 || words[0] === "") {
+                outputField.value = "";
+                return;
+            }
+            
+            let lines = [];
+            let currentLine = [];
+            let currentLength = 0;
+            
+            for (let word of words) {
+                if (currentLine.length > 0 && currentLength + 1 + word.length > targetWidth) {
+                    lines.push(currentLine.join(' '));
+                    currentLine = [word];
+                    currentLength = word.length;
+                } else {
+                    currentLine.push(word);
+                    currentLength += (currentLine.length === 1 ? 0 : 1) + word.length;
+                }
+            }
+            if (currentLine.length > 0) {
+                lines.push(currentLine.join(' '));
+            }
+            
+            outputField.value = lines.join('\n');
+        }
+
+        function formatToSquare() {
+            const input = document.getElementById('input').value;
+            const words = input.replace(/\s+/g, ' ').trim().split(' ');
+            
+            if (words.length === 0 || words[0] === "") {
+                document.getElementById('output').value = "";
+                return;
+            }
+            
+            const totalChars = words.join(' ').length;
+            const targetWidth = Math.max(1, Math.round(Math.sqrt(totalChars)));
+            
+            doWrapText(targetWidth);
+            
+            // Optionally adjust textarea width so it visually matches the calculated square
+            const outputField = document.getElementById('output');
+            const cw = getCharWidth(outputField);
+            
+            if (cw > 0) {
+                const computedStyle = window.getComputedStyle(outputField);
+                const padding = parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight);
+                
+                lastWidthCols = targetWidth; // Prevent observer from immediately overriding
+                outputField.style.width = Math.ceil(targetWidth * cw + padding + 15) + 'px'; 
+            }
+        }
+
+        function copyText() {
+            const outputField = document.getElementById('output');
+            outputField.select();
+            document.execCommand('copy');
+        }
+        const resizeObserver = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                const outputField = document.getElementById('output');
+                const cw = getCharWidth(outputField);
+                
+                if (cw > 0) {
+                    const targetWidth = Math.max(1, Math.floor(entry.contentRect.width / cw) - 1);
+                    if (targetWidth !== lastWidthCols) {
+                        lastWidthCols = targetWidth;
+                        if (document.getElementById('input').value.trim() !== "") {
+                            doWrapText(targetWidth);
+                        }
+                    }
+                }
+            }
+        });
+        resizeObserver.observe(document.getElementById('output'));
+    </script>
+</body>
+</html>

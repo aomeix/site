@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<title>Encoder</title>
+
+<form id="l"><input id="pw" type="password" autocomplete="current-password" placeholder="..." required> <button>Log in</button></form>
+<div id="a" hidden>
+  <textarea id="i" placeholder="..."></textarea>
+  <button id="go">Convert</button> <button id="cp">Copy</button> <button id="lo">Log out</button>
+  <textarea id="o" placeholder="..." readonly></textarea>
+</div>
+<p id="m"></p>
+
+<script>
+const W = 'https://s.aomeix.workers.dev';
+const $ = id => document.getElementById(id);
+let tok = sessionStorage.token || '';
+if (tok && Number(tok.split('.')[0]) * 1000 < Date.now()) tok = '';
+
+const save = t => { tok = t; t ? sessionStorage.token = t : sessionStorage.removeItem('token'); $('l').hidden = !!t; $('a').hidden = !t; };
+save(tok);
+async function req(path, init) {
+  const b = [document.querySelector('#l button'), $('go')];
+  b.forEach(x => x.disabled = true); setTimeout(() => b.forEach(x => x.disabled = false), 1100);
+  try { const r = await fetch(W + path, init); return [r.status, await r.text()]; }
+  catch { $('m').textContent = 'Login failed'; }
+}
+
+$('l').onsubmit = async e => {
+  e.preventDefault(); $('m').textContent = '';
+  const r = await req('/login', { method: 'POST', body: $('pw').value });
+  if (!r) return;
+  if (r[0] == 200) { $('pw').value = ''; save(r[1]); } else $('m').textContent = r[1];
+};
+
+$('go').onclick = async () => {
+  if (!$('i').value.trim()) return;
+  const r = await req('/?message=' + encodeURIComponent($('i').value) + '&token=' + encodeURIComponent(tok));
+  if (!r) return;
+  if (r[0] == 200) { $('o').value = r[1]; $('m').textContent = ''; return; }
+  if (r[0] == 401) save('');
+  $('m').textContent = r[0] == 401 ? 'Please log in again!' : r[1];
+};
+
+$('cp').onclick = () => navigator.clipboard.writeText($('o').value);
+$('lo').onclick = () => { save(''); $('i').value = $('o').value = ''; };
+</script>
